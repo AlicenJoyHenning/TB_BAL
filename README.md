@@ -26,17 +26,15 @@ Each sample underwent ambient RNA correction (SoupX), red blood cell filtering (
 
 The integrated dataset is shown below across all samples coloured according to cell types.
 
-**Lymphoid cells** formed clear clusters from PBMC samples that included T and B cells, with NK cells collecting with T cells. Myeloid population originating from PBMCs collected into a monocyte cluster made of distinct classical (cMono) and non-classical (ncMono) subsets. BAL samples contained predominantly myeloid cells, which, due to low sample quality, showed distinct [batch effects](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/integrated/batch_effect.png) despite robust preprocessing. For this reason finer cell types such as macrophages or dendritic cells, while present, cannot be reliably annotated to a finer label than 'myeloid'.
+**Lymphoid cells** formed clear clusters from PBMC samples that included T and B cells, with NK cells collecting with T cells. Myeloid populations originating from PBMCs are collected into a monocyte cluster made of distinct classical (cMono) and non-classical (ncMono) subsets. BAL samples contained predominantly myeloid cells, which, due to low sample quality, showed distinct [batch effects](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/integrated/batch_effect.png) despite robust preprocessing. For this reason, the myeloid clusters cannot be reliably annotated to finer labels, such as into macrophages or dendritic cells, despite it being likely that they are present.
 
 ![**Figure** UMAP of annotated samples from the integrated TB BAL-PBMC dataset](plots/integrated/annotated.svg)
 
 ## Composition
 
-Cell composition varied across samples, some with a heavy myeloid composition and others with a heavy lymphoid population.
+Cell composition varied across samples, some with a heavy myeloid composition and others with a heavy lymphoid population. However, when viewing the compositions according to tissue origin, we see this is most likely due to differences in BAL and PBMC proportions of the corresponding samples.
 
-However, when viewing the tables isolated according to origin, this is seen to be more likely due to differences in BAL and PBMC proportions corresponding to samples. Samples having more BAL are rich in myeloid cells and those having more PBMCs are rich in lymphoid cells.
-
-But even in accounting for sample origin, there is still relatively high dissimilarity in cell composition between samples. Though this may be due to low sample quality mentioned previously.
+In general, samples of BAL origin are rich in myeloid cells while PBMCs are rich in lymphoid cells. But even in accounting for sample origin, there is still dissimilarity in cell composition between samples.
 
 #### Total cell compositions
 
