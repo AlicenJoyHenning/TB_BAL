@@ -51,5 +51,5 @@ plot_markers <- function(counts, project_name, output){
          dpi = 300 
         )
   
-  saveRDS(counts, filename = paste0(output, project_name, ".rds"))
+  saveRDS(counts, file = paste0(output, project_name, ".rds"))
 }

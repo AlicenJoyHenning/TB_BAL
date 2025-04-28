@@ -1,0 +1,120 @@
+---
+title: "Cell Composition Dashboard"
+format: html
+editor: visual
+execute:
+  freeze: auto
+server: shiny
+---
+
+```{r setup}
+# Load libraries
+library(tidyverse)
+library(DT)    # For interactive tables
+library(shiny) # Shiny for interactive widgets
+```
+
+```{r}
+# Simulate loading your data
+info <- read.csv("https://raw.githubusercontent.com/AlicenJoyHenning/TB_BAL/main/data/annotated_object.csv")
+
+
+# Function to create the summarized data
+prepare_data <- function(data, view_mode = "proportion") {
+  summarized <- data %>%
+    count(sample, annotation) %>%
+    left_join(data %>% count(sample, name = "total_cells"), by = "sample") %>%
+    mutate(proportion = n / total_cells)
+
+  if (view_mode == "count") {
+    summarized <- summarized %>% select(sample, annotation, n)
+  } else {
+    summarized <- summarized %>% select(sample, annotation, proportion)
+  }
+  
+  return(summarized)
+}
+
+# Split datasets
+BAL <- subset(info, grepl("BAL", info$orig.ident))
+PBMC <- subset(info, grepl("PBMC", info$orig.ident))
+
+# UI elements
+ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(
+        inputId = "origin",
+        label = "Select sample origin:",
+        choices = c("BAL", "PBMC", "BAL + PBMC"),
+        selected = "BAL + PBMC"
+      ),
+      uiOutput("sample_selector"),
+      radioButtons(
+        inputId = "view_mode",
+        label = "View as:",
+        choices = c("Proportions" = "proportion", "Counts" = "count"),
+        selected = "proportion"
+      )
+    ),
+    mainPanel(
+      DTOutput("composition_table")
+    )
+  )
+)
+
+# Server logic
+server <- function(input, output, session) {
+  
+  # Reactive dataset based on input
+  selected_data <- reactive({
+    if (input$origin == "BAL") {
+      BAL
+    } else if (input$origin == "PBMC") {
+      PBMC
+    } else {
+      rbind(BAL, PBMC)
+    }
+  })
+  
+  # Dynamically generate sample selector
+  output$sample_selector <- renderUI({
+    samples <- unique(selected_data()$sample)
+    selectizeInput(
+      inputId = "excluded_samples",
+      label = "Exclude samples:",
+      choices = samples,
+      multiple = TRUE
+    )
+  })
+  
+  # Generate summarized table
+  output$composition_table <- renderDT({
+    data <- selected_data()
+    
+    if (!is.null(input$excluded_samples)) {
+      data <- data[!data$sample %in% input$excluded_samples, ]
+    }
+    
+    summarized <- prepare_data(data, view_mode = input$view_mode)
+    
+    # Pivot wider: samples as rows, cell types as columns
+    pivoted <- summarized %>%
+      pivot_wider(names_from = annotation, values_from = ifelse(input$view_mode == "count", "n", "proportion"), values_fill = 0) %>%
+      arrange(sample)
+    
+    # Optional: prefix sample IDs for consistency
+    pivoted$sample <- paste0("ID_", pivoted$sample)
+    
+    datatable(
+      pivoted,
+      rownames = FALSE,
+      options = list(pageLength = 20, scrollX = TRUE)
+    )
+  })
+}
+
+# Launch the app
+shinyApp(ui, server)
+```
+

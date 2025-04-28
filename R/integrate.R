@@ -129,11 +129,9 @@ plot_clusters <- DimPlot(integrated,
   theme(
     plot.title = element_text(hjust = 0.5, size = rel(1), face = "bold"),
     panel.border = element_rect(colour = "black", fill=NA, linewidth =1))
-
-
-info <- integrated@meta.data
-info$DF <- NULL
-info$DamageDetective <- NULL
-write.csv(info, 
-          './data/annotated_object.csv',
-          quote = FALSE)
+ggsave(plot = plot_clusters, 
+       filename = "~/Projects/TB_BAL/plots/integrated/batch_effect.png",
+       width = 7,         
+       height = 6,         
+       dpi = 300 
+)
