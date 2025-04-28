@@ -1,7 +1,8 @@
 # Script for analysis sample compositions
 library(dplyr)
+library(ggplot2)
 
-# Retrieve data
+# Retrieve data ----
 integrated <- readRDS("~/Projects/TB_BAL_data/data/integrated/annotated.rds")
 
 info <- integrated@meta.data
@@ -20,6 +21,7 @@ celltype_counts_normalized <- info %>%
   left_join(info %>% count(sample, name = "total_cells"), by = "sample") %>%
   mutate(proportion = n / total_cells)
 
+# Data manipulation -----
 # Subset for BAL and PBMCs 
 BAL <- subset(info, grepl("BAL", info$orig.ident))
 PBMC <- subset(info, grepl("PBMC", info$orig.ident))
@@ -41,4 +43,55 @@ PBMC_normalized$total_cells <- NULL
 PBMC_normalized$n <- NULL
 PBMC_normalized
 
+# Plot ----
+colours <- c("T" = "#A6CEE3", 
+             "B" = "#B2DE89",
+             "ncMono" = "#FB9A99",
+             "cMono" = "#33A02C", 
+             "myeloid" = "#1D78B4")
 
+# Prepare the data
+celltype_counts_normalized <- celltype_counts_normalized %>%
+  mutate(annotation = factor(annotation, levels = c("B", "T", "ncMono", "cMono", "myeloid"))) %>%
+  group_by(sample) %>%
+  mutate(proportion = n / sum(n))  # Normalize proportions
+
+# Create the stacked bar plot
+plot <- ggplot(celltype_counts_normalized, 
+               aes(x = proportion, y = factor(sample), fill = annotation)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = colours) +
+  labs(fill = "") +
+  theme_minimal() +
+  theme(axis.title = element_blank(), 
+        legend.position = "bottom")  
+
+# Save the plot as an SVG
+ggsave("./plots/composition/PBMC_BAL_proportion.svg", plot, width = 8, height = 4)
+
+# Repeat for isolated 
+
+# Create the stacked bar plot
+BAL_plot <- ggplot(BAL_normalized, 
+               aes(x = proportion, y = factor(sample), fill = annotation)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = colours) +
+  labs(fill = "") +
+  theme_minimal() +
+  theme(axis.title = element_blank(), 
+        legend.position = "bottom")  
+
+# Save the plot as an SVG
+ggsave("./plots/composition/BAL_proportion.svg", BAL_plot, width = 8, height = 4)
+
+PBMC_plot <- ggplot(PBMC_normalized, 
+                   aes(x = proportion, y = factor(sample), fill = annotation)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = colours) +
+  labs(fill = "") +
+  theme_minimal() +
+  theme(axis.title = element_blank(), 
+        legend.position = "bottom")  
+
+# Save the plot as an SVG
+ggsave("./plots/composition/PBMC_proportion.svg", PBMC_plot, width = 8, height = 4)

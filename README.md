@@ -38,21 +38,11 @@ However, when viewing the tables isolated according to origin, this is seen to b
 
 But even in accounting for sample origin, there is still relatively high dissimilarity in cell composition between samples. Though this may be due to low sample quality mentioned previously.
 
-To explore this interactively, travel to the dashboard [here]().
-
 #### Total cell compositions
 
-**Table** Proportion of each cell type within samples of both BAL and PBMC origin
+![](plots/composition/PBMC_BAL_proportion.svg)
 
-| Sample |    B    |    T    |  cMono  | myeloid | ncMono  |
-|:------:|:-------:|:-------:|:-------:|:-------:|:-------:|
-|  1098  | 0.01932 | 0.14654 | 0.01610 | 0.81562 | 0.00242 |
-|  1376  | 0.01781 | 0.22365 | 0.00643 | 0.74320 | 0.00891 |
-|  1483  | 0.03011 | 0.06148 | 0.00376 | 0.89962 | 0.00502 |
-|  1484  | 0.21154 | 0.64615 | 0.03077 | 0.03077 | 0.08077 |
-|  1523  | 0.19704 | 0.46305 | 0.17734 | 0.00493 | 0.15764 |
-|  1566  | 0.06100 | 0.08200 | 0.03200 | 0.79400 | 0.03100 |
-|  1676  | 0.13095 | 0.14583 | 0.00595 | 0.71726 | 0.00000 |
+**Figure** Proportion of each cell type within samples of both BAL and PBMC origin
 
 **Table** Actual cell numbers originating from each sample of both BAL and PBMC origin
 
@@ -68,28 +58,40 @@ To explore this interactively, travel to the dashboard [here]().
 
 #### Isolated BAL and PBMC compositions
 
-**Table** Cell compositions of BAL sample origin
+**BAL**
 
-| Sample  | B        | T        | myeloid  | cMono    | ncMono   |
-|---------|----------|----------|----------|----------|----------|
-| ID_1098 | 0.002998 | 0.097451 | 0.899550 |          |          |
-| ID_1376 |          | 0.000000 | 1.000000 |          |          |
-| ID_1483 | 0.001368 | 0.017784 | 0.980848 |          |          |
-| ID_1523 | 0.197044 | 0.463054 | 0.004926 | 0.177340 | 0.157635 |
-| ID_1566 | 0.001264 | 0.015171 | 0.983565 |          |          |
-| ID_1676 |          | 0.036000 | 0.964000 |          |          |
+![](plots/composition/BAL_proportion.svg)
 
-**Table** Cell compositions of PBMC sample origin
+**Figure** Cell compositions of BAL sample origin
 
-| Sample  | B        | T        | myeloid  | cMono    | ncMono   |
-|---------|----------|----------|----------|----------|----------|
-| ID_1098 | 0.038261 | 0.203478 | 0.718261 | 0.034783 | 0.005217 |
-| ID_1376 | 0.067925 | 0.852830 | 0.020755 | 0.024528 | 0.033962 |
-| ID_1483 | 0.348485 | 0.545455 |          | 0.045455 | 0.060606 |
-| ID_1484 | 0.211538 | 0.646154 | 0.030769 | 0.030769 | 0.080769 |
-| ID_1523 | 0.197044 | 0.463054 | 0.004926 | 0.177340 | 0.157635 |
-| ID_1566 | 0.287081 | 0.334928 | 0.076555 | 0.153110 | 0.148325 |
-| ID_1676 | 0.511628 | 0.465116 |          | 0.023256 |          |
+**Table** Actual cell numbers for BAL sample origin
+
+| Sample  |  B  |  T  | cMono | ncMono | myeloid |
+|:-------:|:---:|:---:|:-----:|:------:|:-------:|
+| ID_1098 |  2  | 65  |  NA   |   NA   |   600   |
+| ID_1376 | NA  | NA  |  NA   |   NA   |  1491   |
+| ID_1483 |  1  | 13  |  NA   |   NA   |   717   |
+| ID_1523 | 40  | 94  |  36   |   32   |    1    |
+| ID_1566 |  1  | 12  |  NA   |   NA   |   778   |
+| ID_1676 | NA  |  9  |  NA   |   NA   |   241   |
+
+**PBMC**
+
+![](plots/composition/PBMC_proportion.svg)
+
+**Figure** Cell compositions of PBMC sample origin
+
+**Table** Actual cell numbers for PBMC sample origin
+
+| Sample  |  B  |  T  | cMono | ncMono | myeloid |
+|:-------:|:---:|:---:|:-----:|:------:|:-------:|
+| ID_1098 | 22  | 117 |  20   |   3    |   413   |
+| ID_1376 | 36  | 452 |  13   |   18   |   11    |
+| ID_1483 | 23  | 36  |   3   |   4    |   NA    |
+| ID_1484 | 55  | 168 |   8   |   21   |    8    |
+| ID_1523 | 40  | 94  |  36   |   32   |    1    |
+| ID_1566 | 60  | 70  |  32   |   31   |   16    |
+| ID_1676 | 44  | 40  |   2   |   NA   |   NA    |
 
 ## References
 
