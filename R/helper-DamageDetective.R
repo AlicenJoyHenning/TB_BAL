@@ -9,7 +9,6 @@ run_DD <- function(counts){
 
   filtered_matrix <- detect_damage(
     count_matrix = counts@assays$RNA$counts,
-    ribosome_penalty = 1,
     seed = 7
   )
   
@@ -26,5 +25,5 @@ run_DD <- function(counts){
          height = 4,         
          dpi = 300)
   
-  return( counts)
+  return(counts)
 }

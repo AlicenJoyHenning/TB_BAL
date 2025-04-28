@@ -2,7 +2,7 @@ library(Seurat)
 library(ggplot2)
 
 
-plot_markers <- function(counts, project_name){
+plot_markers <- function(counts, project_name, output){
   
   counts <- NormalizeData(counts, verbose = FALSE) %>%
     FindVariableFeatures(verbose = FALSE) %>%
@@ -45,9 +45,11 @@ plot_markers <- function(counts, project_name){
   UMAP_markers <- plot_clusters + wrap_plots(markers_plot) + plot_layout(ncol = 2)
   
   ggsave(plot = UMAP_markers, 
-         filename = paste0("./plots/", project_name, ".png"), 
+         filename = paste0(output, project_name, ".png"), 
          width = 12,         
          height = 6,         
          dpi = 300 
         )
+  
+  saveRDS(counts, filename = paste0(output, project_name, ".rds"))
 }
