@@ -1,8 +1,3 @@
----
-title: "README"
-output: html_document
----
-
 # Sutherland project \| BAL PBMC dataset
 
 ## Preprocessing workflow
@@ -23,15 +18,15 @@ Each sample underwent ambient RNA correction (SoupX), red blood cell filtering (
 | ID_1566   | 791 \*          | 209              |
 | ID_1676   | 250 \*          | 86               |
 
-> Note: BAL samples showed unusual clustering patterns in samples [BAL_1376](), [BAL_1483](), and [BAL_1566]() as well as to a small extent in [BAL_1676](). This is typical of low quality, apparent upon comparison to high quality samples, [BAL_1098]() and [BAL_1523]().
+> Note: BAL samples showed unusual clustering patterns in samples [BAL_1376](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1376.png), [BAL_1483](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1483.png), and [BAL_1566](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1566.png) as well as to a small extent in [BAL_1676](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1676.png). This is typical of low quality, apparent upon comparison to high quality samples, [BAL_1098](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1098.png) and [BAL_1523](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1523.png).
 >
-> All PBMC samples were of a high quality, seen here [PBMC_1098](), [PBMC_1376](), [PBMC_1483](), [PBMC_1484](), [PBMC_1523](), [PBMC_1566](), and [PBMC_1676]().
+> All PBMC samples were of a high quality, seen here [PBMC_1098](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/PBMC_1098.png), [PBMC_1376](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/PBMC_1376.png), [PBMC_1483](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/PBMC_1483.png), [PBMC_1484](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/PBMC_1484.png), [PBMC_1523](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/PBMC_1523.png), [PBMC_1566](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/PBMC_1566.png), and [PBMC_1676](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/PBMC_1676.png).
 
 ## Visualisations
 
 The integrated dataset is shown below across all samples coloured according to cell types.
 
-**Lymphoid cells** formed clear clusters from PBMC samples that included T and B cells, with NK cells collecting with T cells. Myeloid population originating from PBMCs collected into a monocyte cluster made of distinct classical (cMono) and non-classical (ncMono) subsets. BAL samples contained predominantly myeloid cells, which, due to low sample quality, showed distinct [batch effects]() despite robust preprocessing. For this reason finer cell types such as macrophages or dendritic cells, while present, cannot be reliably annotated to a finer label than 'myeloid'.
+**Lymphoid cells** formed clear clusters from PBMC samples that included T and B cells, with NK cells collecting with T cells. Myeloid population originating from PBMCs collected into a monocyte cluster made of distinct classical (cMono) and non-classical (ncMono) subsets. BAL samples contained predominantly myeloid cells, which, due to low sample quality, showed distinct [batch effects](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/integrated/batch_effect.png) despite robust preprocessing. For this reason finer cell types such as macrophages or dendritic cells, while present, cannot be reliably annotated to a finer label than 'myeloid'.
 
 ![**Figure** UMAP of annotated samples from the integrated TB BAL-PBMC dataset](plots/integrated/annotated.svg)
 
@@ -96,12 +91,12 @@ To explore this interactively, travel to the dashboard [here]().
 | ID_1566 | 0.287081 | 0.334928 | 0.076555 | 0.153110 | 0.148325 |
 | ID_1676 | 0.511628 | 0.465116 |          | 0.023256 |          |
 
-## References 
+## References
 
 -   Young, M.D., Behjati, S. (2020). SoupX removes ambient RNA contamination from droplet-based single-cell RNA sequencing data, GigaScience, Volume 9, Issue 12, December 2020, giaa151bioRxiv, 303727, <https://doi.org/10.1093/gigascience/giaa151>
 
--   Hao, Y., Stuart, T., Kowalski, M., Choudhary, S., Hoffman, P., Hartman, A., Srivastava, A., Molla, G., Madad, S., Fernandez-Granda, C. & Satija, R. (2024) 'Dictionary learning for integrative, multimodal and massively scalable single-cell analysis', *Nature Biotechnology*, 42(2), pp. 293–304. doi:10.1038/s41587-023-01767-y.
+-   Hao, Y., Stuart, T., Kowalski, M., Choudhary, S., Hoffman, P., Hartman, A., Srivastava, A., Molla, G., Madad, S., Fernandez-Granda, C. & Satija, R. (2024) 'Dictionary learning for integrative, multimodal and massively scalable single-cell analysis', *Nature Biotechnology*, 42(2), pp. 293–304. <doi:10.1038/s41587-023-01767-y>.
 
 -   McGinnis, C.S., Murrow, L.M. and Gartner, Z.J. (2019). DoubletFinder: Doublet detection in single-cell RNA sequencing data using artificial nearest neighbors. *Cell Systems*, 8(4), pp.329-337.e4. <https://doi.org/10.1016/j.cels.2019.03.003>
 
-Note this workflow made use of the DamageDetective R package we are in the process of writing up that is available on [GitHub](https://github.com/AlicenJoyHenning/DamageDetective) and [CRAN](<https://cloud.r-project.org/web/packages/DamageDetective/index.html>).
+Note this workflow made use of the DamageDetective R package we are in the process of writing up that is available on [GitHub](https://github.com/AlicenJoyHenning/DamageDetective) and [CRAN](https://cloud.r-project.org/web/packages/DamageDetective/index.html).
