@@ -30,6 +30,15 @@ The integrated dataset is shown below across all samples coloured according to c
 
 ![**Figure** UMAP of annotated samples from the integrated TB BAL-PBMC dataset](plots/integrated/annotated.svg)
 
+<br>
+
+![**Figure** UMAP of annotated samples from the integrated TB BAL dataset](plots/integrated/PBMC_markers.png)
+
+<br>
+
+![**Figure** UMAP of annotated samples from the integrated TB BA dataset](plots/integrated/BAL_markers.png)
+
+
 ## Composition
 
 Cell composition varied across samples, some with a heavy myeloid composition and others with a heavy lymphoid population. However, when viewing the compositions according to tissue origin, we see this is most likely due to differences in BAL and PBMC proportions of the corresponding samples.
