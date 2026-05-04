@@ -83,36 +83,35 @@ window.Quarto = {
 <p>All BAL samples were included in this analysis, despite the presence of batch effects in the BAL samples seen during clustering, due to the high quality of their alignment metrics (<a href="https://github.com/AlicenJoyHenning/TB_BAL/blob/master/data/alignment.csv">Alignment QC</a> ). Significantly expressed (p_adj&lt;0.05) genes coming from technical differences (pseudogenes, genes with unannotated IDs, sex-linked genes XIST, DDX3Y) were not included in the variable gene expression analysis and clustering in the analysis.</p>
 <p><strong>Table</strong> AMs isolated from each BAL sample</p>
 <table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">Sample ID</th>
-<th style="text-align: left;">AM Cell Number</th>
+<th style="text-align: left;"><strong>Sample ID</strong></th>
+<th style="text-align: center;">ID_1098</th>
+<th style="text-align: center;">ID_1376</th>
+<th style="text-align: center;">ID_1483</th>
+<th style="text-align: center;">ID_1523</th>
+<th style="text-align: center;">ID_1566</th>
+<th style="text-align: center;">ID_1676</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">ID_1098</td>
-<td style="text-align: left;">577</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">ID_1376</td>
-<td style="text-align: left;">1422</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">ID_1483</td>
-<td style="text-align: left;">713</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">ID_1523</td>
-<td style="text-align: left;">443</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">ID_1566</td>
-<td style="text-align: left;">702</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">ID_1676</td>
-<td style="text-align: left;">241</td>
+<td style="text-align: left;"><strong>AM Cell Number</strong></td>
+<td style="text-align: center;">577</td>
+<td style="text-align: center;">1422</td>
+<td style="text-align: center;">713</td>
+<td style="text-align: center;">443</td>
+<td style="text-align: center;">702</td>
+<td style="text-align: center;">241</td>
 </tr>
 </tbody>
 </table>
@@ -121,24 +120,13 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="am-subclustering">AM subclustering</h2>
 <p>The isolated AMs were further analyzed through subclustering with <code>Seurat</code>. Three distinct populations were identified, representing different stages of macrophage maturation and activity:</p>
 <ul>
-<li><p><strong>Early activated AMs</strong> (MARCO+, ITGAM+) showing high expression of <span class="math inline">\(ITGAM\)</span> (<span class="math inline">\(CD11b\)</span>), a classic marker of recruited myeloid cells, alongside activation markers like <span class="math inline">\(CYP1B1\)</span> and <span class="math inline">\(EMP1\)</span>.</p></li>
-<li><p><strong>Mature AMs</strong> (MARCO+, ITGAM-) with cells have downregulated recruitment markers in favour of genes associated with maintenance of the alveolar niche, including as <span class="math inline">\(THBS1\)</span> (Thrombospondin 1) and <span class="math inline">\(SIGLEC5\)</span>.</p></li>
-<li><p><strong>Proliferating AMs</strong> (MARCO+, MKI67+) a small population emerging as a bridge between them with definite proliferative marker gene expression.</p></li>
+<li><p><strong>Early activated AMs</strong> (<em>MARCO</em>+, _ITGAM+) showing high expression of <span class="math inline">\(ITGAM\)</span> (<span class="math inline">\(CD11b\)</span>), a classic marker of recruited myeloid cells, alongside activation markers like <span class="math inline">\(CYP1B1\)</span> and <span class="math inline">\(EMP1\)</span>.</p></li>
+<li><p><strong>Mature AMs</strong> (<em>MARCO</em>+, ITGAM-) with cells have downregulated recruitment markers in favour of genes associated with maintenance of the alveolar niche, including as <span class="math inline">\(THBS1\)</span> (Thrombospondin 1) and <span class="math inline">\(SIGLEC5\)</span>.</p></li>
+<li><p><strong>Proliferating AMs</strong> (<em>MARCO</em>+, MKI67+) a small population emerging as a bridge between them with definite proliferative marker gene expression.</p></li>
 </ul>
 <p><br></p>
-<div>
-
-</div>
-<div class="quarto-layout-panel" data-layout-ncol="2">
-<div class="quarto-layout-row">
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/AM_clusters_umap.png" class="img-fluid"></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img src="https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/AM_clusters_features.svg" class="img-fluid"></p>
-</div>
-</div>
-</div>
+<p><img src="https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/AM_clusters_umap.png" class="img-fluid" style="width:80.0%"></p>
+<p><img src="https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/AM_clusters_features.svg" class="img-fluid" style="width:80.0%"></p>
 <p><img src="https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/markers_dot.svg" class="img-fluid" style="width:80.0%"></p>
 <p><strong>Figure</strong> Alevolar Macrophage (AM) subclusters with marker gene expression</p>
 <p><br></p>
@@ -209,6 +197,83 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
+<p><br></p>
+</section>
+<section id="subcluster-proportions" class="level2">
+<h2 class="anchored" data-anchor-id="subcluster-proportions">Subcluster Proportions</h2>
+<p>While each BAL sample has a heterogenous colleciton of AM subclusters, BAL_1376 has a definitively higher proportion of early AMs compared to mature AMS.</p>
+<p><br></p>
+<p><img src="https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/BAL_subtype_proportion.svg" class="img-fluid" style="width:80.0%"></p>
+<p><strong>Figure</strong> Proportion of AM subtypes across BAL samples</p>
+<p><strong>Table</strong> Proporitons of AM subtypes in each BAL sample</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 19%">
+<col style="width: 21%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Sample ID</th>
+<th style="text-align: left;">Total AMs</th>
+<th style="text-align: left;">Early AMs (%)</th>
+<th style="text-align: left;">Mature AMs (%)</th>
+<th style="text-align: left;">Proliferating AMs (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ID_1098</td>
+<td style="text-align: left;">577</td>
+<td style="text-align: left;">62 (10.7%)</td>
+<td style="text-align: left;">505 (87.5%)</td>
+<td style="text-align: left;">10 (1.7%)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ID_1376</td>
+<td style="text-align: left;">1422</td>
+<td style="text-align: left;">1009 (71.0%)</td>
+<td style="text-align: left;">358 (25.2%)</td>
+<td style="text-align: left;">55 (3.9%)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ID_1483</td>
+<td style="text-align: left;">713</td>
+<td style="text-align: left;">34 (4.8%)</td>
+<td style="text-align: left;">655 (91.9%)</td>
+<td style="text-align: left;">24 (3.4%)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ID_1523</td>
+<td style="text-align: left;">443</td>
+<td style="text-align: left;">18 (4.1%)</td>
+<td style="text-align: left;">412 (93.0%)</td>
+<td style="text-align: left;">13 (2.9%)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ID_1566</td>
+<td style="text-align: left;">702</td>
+<td style="text-align: left;">41 (5.8%)</td>
+<td style="text-align: left;">644 (91.7%)</td>
+<td style="text-align: left;">17 (2.4%)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ID_1676</td>
+<td style="text-align: left;">241</td>
+<td style="text-align: left;">31 (12.9%)</td>
+<td style="text-align: left;">197 (81.7%)</td>
+<td style="text-align: left;">13 (5.4%)</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+</section>
+<section id="differentiation-markers" class="level2">
+<h2 class="anchored" data-anchor-id="differentiation-markers">Differentiation markers</h2>
+<p>However, no significant differences in expression were detected across the samples or subclusters according to classical differentiation genes, with the plot plow showing uniform expressions.</p>
+<p><img src="https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/differentiation_features.svg" class="img-fluid"></p>
 </section>
 </section>
 
