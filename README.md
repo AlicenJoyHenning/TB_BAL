@@ -10,17 +10,18 @@ Each sample underwent ambient RNA correction (SoupX), red blood cell filtering (
 
 | Sample ID | BAL Cell Number | PBMC Cell Number |
 |:----------|:----------------|:-----------------|
-| ID_1098   | 667             | 575              |
-| ID_1376   | 1491 \*         | 530              |
-| ID_1483   | 731 \*          | 66               |
+| ID_1098   | 637             | 575              |
+| ID_1376   | 1431 \*         | 530              |
+| ID_1483   | 730 \*          | 66               |
 | ID_1484   | \-              | 260              |
-| ID_1523   | 203             | 203              |
-| ID_1566   | 791 \*          | 209              |
+| ID_1523   | 454             | 203              |
+| ID_1566   | 712 \*          | 209              |
 | ID_1676   | 250 \*          | 86               |
 
-> Note: BAL samples showed unusual clustering patterns in samples \*[BAL_1376](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1376.png), \*[BAL_1483](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1483.png), \*[BAL_1566](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1566.png) and, to a small extent, \*[BAL_1676](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1676.png). This is typical of low quality samples. This is clear when comparing the clustering to high quality samples, [BAL_1098](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1098.png) and [BAL_1523](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1523.png).
->
 > All PBMC samples were of a high quality [PBMC_1098](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/PBMC_1098.png), [PBMC_1376](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/PBMC_1376.png), [PBMC_1483](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/PBMC_1483.png), [PBMC_1484](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/PBMC_1484.png), [PBMC_1523](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/PBMC_1523.png), [PBMC_1566](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/PBMC_1566.png), and [PBMC_1676](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/PBMC_1676.png).
+>
+> Note: BAL samples showed more homogenous clustering patterns in samples \*[BAL_1376](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1376.png), \*[BAL_1483](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1483.png), \*[BAL_1566](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1566.png) and, to a small extent, \*[BAL_1676](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/plots/sample_quality/BAL_1676.png), that may be indicative of lower quality.
+>
 
 ## Visualisations
 
@@ -73,14 +74,14 @@ In general, samples of BAL origin are rich in myeloid cells while PBMCs are rich
 
 **Table** Actual cell numbers for BAL sample origin
 
-| Sample  |  B  |  T  | cMono | ncMono | myeloid |
-|:-------:|:---:|:---:|:-----:|:------:|:-------:|
-| ID_1098 |  2  | 65  |  NA   |   NA   |   600   |
-| ID_1376 | NA  | NA  |  NA   |   NA   |  1491   |
-| ID_1483 |  1  | 13  |  NA   |   NA   |   717   |
-| ID_1523 | 40  | 94  |  36   |   32   |    1    |
-| ID_1566 |  1  | 12  |  NA   |   NA   |   778   |
-| ID_1676 | NA  |  9  |  NA   |   NA   |   241   |
+| Sample  |  B  |  T  | Myeloid |
+|:-------:|:---:|:---:|:-----:|
+| ID_1098 |  1  | 62  |  574   |
+| ID_1376 | 0  | 3  |  1428  |
+| ID_1483 |  1  | 19 | 710   |
+| ID_1523 | 1  | 10  |  443   |
+| ID_1566 |  1  | 10  |  701   |
+| ID_1676 | 0  |  10  |  240   |
 
 **PBMC**
 

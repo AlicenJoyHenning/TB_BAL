@@ -10,6 +10,8 @@ packages <- c(
 lapply(packages, library, character.only = TRUE)
 
 # Load helper scripts ----
+setwd("/home/alicen/Projects/TB_BAL")
+
 source("./R/helper-soupx.R")
 source("./R/helper-rbc.R")
 source("./R/helper-DoubletFinder.R")
@@ -33,7 +35,7 @@ preprocess <- function(
   counts <- run_DD(counts)
   
   # Filter doublets 
-  counts <- run_DF(counts)
+  #counts <- run_DF(counts)
   
   # View sample
   plot_markers(counts, project_name, output)
@@ -49,7 +51,6 @@ preprocess <- function(
 }
 
 # Run the samples -----
-
 samples <- data.frame(
   BAL_1098 = c("~/Projects/TB_BAL_data/zipped/BAL_1098/BAL_1098Solo.out/Gene/filtered", 
                "~/Projects/TB_BAL_data/zipped/BAL_1098/BAL_1098Solo.out/Gene/raw"),
@@ -79,6 +80,10 @@ samples <- data.frame(
                 "~/Projects/TB_BAL_data/zipped/PBMC_1676/PBMC_1676Solo.out/Gene/raw")
 )
 
+samples <- data.frame(
+    BAL_1523 = c("/home/alicen/Projects/TB_BAL_data/zipped/BAL_1523/BAL_1523/alignmentSolo.out/Gene/filtered", 
+               "/home/alicen/Projects/TB_BAL_data/zipped/BAL_1523/BAL_1523/alignmentSolo.out/Gene/raw")
+)
 
 for (sample in names(samples)){
   message("Running ", sample, "...")

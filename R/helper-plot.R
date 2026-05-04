@@ -1,5 +1,6 @@
 library(Seurat)
 library(ggplot2)
+library(patchwork)
 
 
 plot_markers <- function(counts, project_name, output){

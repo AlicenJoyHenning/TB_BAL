@@ -100,6 +100,7 @@ TB_BAL_dataset <- FindNeighbors(TB_BAL_dataset, dims = 1:10) %>%
   FindClusters() %>%
   RunUMAP(dims = 1:10)
 
+saveRDS(TB_BAL_dataset, "~/Projects/TB_BAL_data/data/integrated/TB_BAL_dataset.rds")
 
 # Transfer annotations ----
 integrated <- readRDS("~/Projects/TB_BAL_data/data/integrated/annotated.rds")
@@ -137,7 +138,7 @@ plot <- DimPlot(TB_BAL_dataset,
     panel.border = element_rect(colour = "black", fill=NA, linewidth =1))
 
 ggsave(plot = plot, 
-       filename = "~/Projects/TB_BAL/plots/integrated/BAL_UMAP.png",
+       filename = "~/Projects/TB_BAL/plots/integrated/BAL_UMAP.svg",
        width = 5,         
        height = 4,         
        dpi = 300 
@@ -160,7 +161,7 @@ features <- features &
 BAL <- plot | features 
 
 ggsave(plot = BAL, 
-       filename = "~/Projects/TB_BAL/plots/integrated/BAL_markers.png",
+       filename = "~/Projects/TB_BAL/plots/integrated/BAL_markers.svg",
        width = 8,         
        height = 6,         
        dpi = 300 
@@ -175,7 +176,7 @@ plot <- DimPlot(TB_PBMC_dataset,
                 reduction = "umap",
                 group.by = "annotations") +
   NoAxes() +
-  labs(title = "Integrated BAL samples") + 
+  labs(title = "Integrated PBMC samples") + 
   xlab("UMAP 1") +
   ylab("UMAP 2") +
   theme(
@@ -183,7 +184,7 @@ plot <- DimPlot(TB_PBMC_dataset,
     panel.border = element_rect(colour = "black", fill=NA, linewidth =1))
 
 ggsave(plot = plot, 
-       filename = "~/Projects/TB_BAL/plots/integrated/PBMC_UMAP.png",
+       filename = "~/Projects/TB_BAL/plots/integrated/PBMC_UMAP.svg",
        width = 5,         
        height = 4,         
        dpi = 300 
@@ -206,8 +207,11 @@ features <- features &
 PBMC <- plot | features 
 
 ggsave(plot = PBMC, 
-       filename = "~/Projects/TB_BAL/plots/integrated/PBMC_markers.png",
+       filename = "~/Projects/TB_BAL/plots/integrated/PBMC_markers.svg",
        width = 8,         
        height = 6,         
        dpi = 300 
 )
+
+
+
