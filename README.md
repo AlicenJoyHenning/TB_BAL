@@ -49,7 +49,7 @@ In general, samples of BAL origin are rich in myeloid cells while PBMCs are rich
 
 #### Total cell compositions
 
-![](plots/composition/PBMC_BAL_proportion.svg)
+![](plots/composition/All_proportion.svg)
 
 **Figure** Proportion of each cell type within samples of both BAL and PBMC origin
 

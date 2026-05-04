@@ -31,22 +31,24 @@ data_dir <- "~/Projects/TB_BAL_data/data/preprocessed/"
 BAL_1098 <- readRDS(paste0(data_dir, "BAL_1098.rds"))
 BAL_1376 <- readRDS(paste0(data_dir, "BAL_1376.rds"))
 BAL_1483 <- readRDS(paste0(data_dir, "BAL_1483.rds"))
+BAL_1523 <- readRDS(paste0(data_dir, "BAL_1523.rds"))
 BAL_1566 <- readRDS(paste0(data_dir, "BAL_1566.rds"))
 BAL_1676 <- readRDS(paste0(data_dir, "BAL_1676.rds"))
+PBMC_1523 <- readRDS(paste0(data_dir, "PBMC_1523.rds")) # Helps to separate out cell types
 
-rds_list <- list(BAL_1098, BAL_1376, BAL_1483, BAL_1566, BAL_1676)
-
+rds_list <- list(BAL_1098, BAL_1376, BAL_1483, BAL_1523, BAL_1566, BAL_1676, PBMC_1523)
 cells <- c(
   unique(rds_list[[1]]$orig.ident), unique(rds_list[[2]]$orig.ident), 
   unique(rds_list[[3]]$orig.ident), unique(rds_list[[4]]$orig.ident), 
-  unique(rds_list[[5]]$orig.ident)
+  unique(rds_list[[5]]$orig.ident), unique(rds_list[[6]]$orig.ident), 
+  unique(rds_list[[7]]$orig.ident)
 )
   
 # Merge data
 TB_BAL_dataset <- merge(
   x = rds_list[[1]], 
   y = c(
-    rds_list[[2]], rds_list[[3]], rds_list[[4]],rds_list[[5]]
+    rds_list[[2]], rds_list[[3]], rds_list[[4]],rds_list[[5]], rds_list[[6]], rds_list[[7]]
   ),
   add.cell.ids = cells
 )
@@ -57,8 +59,16 @@ packageVersion("Seurat")
 
 # Normalise counts 
 TB_BAL_dataset <- NormalizeData(TB_BAL_dataset) %>%
-  FindVariableFeatures(selection.method = "mean.var.plot") %>% 
-  ScaleData() %>% 
+  FindVariableFeatures(selection.method = "mean.var.plot") 
+
+# Identify junk (Pseudogenes, Ribosomal, Mitochondrial, and ENSG IDs)
+junk_features <- grep("^RP[L|S]|^MT-|^ENSG|P[0-9]$|^HLA-DPA2$|^HLA-DPB2$", 
+                      VariableFeatures(TB_BAL_dataset), value = TRUE)
+
+# Update VariableFeatures to exclude the junk
+VariableFeatures(TB_BAL_dataset) <- setdiff(VariableFeatures(TB_BAL_dataset), junk_features)
+
+TB_BAL_dataset <- ScaleData(TB_BAL_dataset) %>% 
   RunPCA()
 
 TB_BAL_integrated <- IntegrateLayers(
@@ -66,7 +76,7 @@ TB_BAL_integrated <- IntegrateLayers(
   method = RPCAIntegration, # CCAIntegration
   assay = "RNA",
   orig.reduction = "pca", 
-  k.weight = 66, # Reduced from 100 due to small cell number
+  # k.weight = 66, # Reduced from 100 due to small cell number
   new.reduction = "integrated")
 
 # Counts separate in v5, must join
@@ -79,24 +89,11 @@ TB_BAL_integrated <- FindNeighbors(TB_BAL_integrated, reduction = "integrated", 
   RunUMAP(dims = 1:10)
 
 # Visualise integration
-DimPlot(TB_BAL_integrated) # general clusters? Not really 
+DimPlot(TB_BAL_integrated) # general clusters 
 DimPlot(TB_BAL_integrated, group.by = "orig.ident") # samples separate, not integrated
 
 
 # Alveolar Macrophages (AMs) signals ----
-
-# Mature
-FeaturePlot(TB_BAL_integrated, features = c(
-    "MARCO", "PPARG", # all except small cluster at top - # 10 seurat cluster
-    "FABP4", # all, except # 10 and extending 
-    "SIGLEC1"
-))
-
-# Early
-FeaturePlot(TB_BAL_integrated, features = c(
-    "S100A8", # all same, not informative
-    "VCAN", "FCN1" # highlight the same few cells 
-))
 
 # Other cell types or artifacts 
 library(ggplot2)
@@ -104,7 +101,6 @@ TB_BAL_integrated$mt.percent <- PercentageFeatureSet(TB_BAL_integrated, pattern 
 
 ggplot(TB_BAL_integrated@meta.data, aes(y = mt.percent, x = nFeature_RNA)) + 
   geom_point() 
-
 
 # Running DamageDetection
 library(DamageDetective)
@@ -127,10 +123,8 @@ TB_BAL_filtered <- FindNeighbors(TB_BAL_filtered, reduction = "integrated", dims
   FindClusters() %>%
   RunUMAP(dims = 1:10)
 
-
 DimPlot(TB_BAL_filtered, label = TRUE, repel = TRUE) # Better separation of clusters
-# Cluster 8 = t cells 
-# Minimal B cells ~ cluster 10 at edge of cluster 3
+DimPlot(TB_BAL_filtered, group.by = "orig.ident") # Still strong batch effect, but better than before
 
 FeaturePlot(TB_BAL_filtered, features = c(
  "PTPRC", # all immune?
@@ -138,45 +132,70 @@ FeaturePlot(TB_BAL_filtered, features = c(
  "MS4A1" # B?
 ))
 
+# Cluster 8 = t cells 
+# Minimal B cells ~ cluster 10 at edge of cluster 3
+
+# Mature
 FeaturePlot(TB_BAL_filtered, features = c(
-    "MARCO", "PPARG"
+    "MARCO", "PPARG", # all except small cluster at top - # 10 seurat cluster
+    "FABP4", # all, except # 10 and extending 
+    "SIGLEC1"
+))
+
+# Early
+FeaturePlot(TB_BAL_filtered, features = c(
+    "S100A8", # all same, not informative
+    "VCAN", "FCN1" # highlight the same few cells 
 ))
 
 # Remaining clusters all seem to be AM but show a distinct batch effect: 
 # - BAL_1376 , BAL_1483 , BAL_1566, BAL_1676  cluster strongly on their own, BAL 1098 spread out
 
 # First isolating the Alveolar Macrophages (AMs)
-TB_BAL_AM <- subset(TB_BAL_filtered, !TB_BAL_filtered$seurat_clusters %in% c(8,10)) # Removing T & B
+# Remove PBMCs 
+TB_BAL_filtered <- subset(TB_BAL_filtered, !TB_BAL_filtered$orig.ident == "PBMC_1523") 
+DimPlot(TB_BAL_filtered)
 
-# Recluster 
+DimPlot(TB_BAL_filtered, group.by = "seurat_clusters", label = TRUE, repel = TRUE) 
+FeaturePlot(TB_BAL_filtered, features = c(
+    "CD3E"
+   # "MS4A1"
+))
 
-TB_BAL_AM <- NormalizeData(TB_BAL_AM) %>%
-  FindVariableFeatures() %>% 
-  ScaleData() %>% 
-  RunPCA()
+# converting to loupe for finer labelling of t and b cells (not big enough for precise clusters)
+create_loupe_from_seurat(TB_BAL_filtered, 
+output_dir = "/home/alicen/Projects/TB_BAL_data/data/LoupeR",
+output_name = "TB_BAL_lympocytes_unlabelled")
 
+lymph_labels <- read.csv("/home/alicen/Projects/TB_BAL_data/data/LoupeR/BAL_lymphocytes_labelled.csv")
+
+# Match barcodes to tranfer labels 
+TB_BAL_filtered$groups <- lymph_labels$Celltypes[match(colnames(TB_BAL_filtered), lymph_labels$Barcode)]
+TB_BAL_filtered$groups <- ifelse(TB_BAL_filtered$groups == "Unknown", "Myeloid", TB_BAL_filtered$groups)
+DimPlot(TB_BAL_filtered, group.by = "groups", pt.size = 2)
+
+saveRDS(TB_BAL_filtered, "~/Projects/TB_BAL_data/data/integrated/TB_BAL_lymphocytes_labelled.rds")
+# Save for plot 
+
+# Continue with isolation
+TB_BAL_AM$MS4A1 <- TB_BAL_AM@assays$RNA$data["MS4A1", ]
+TB_BAL_AM <- subset(TB_BAL_AM, !TB_BAL_AM$seurat_clusters %in% c(8)) # Removing  B
+TB_BAL_AM <- subset(TB_BAL_AM, TB_BAL_AM$MS4A1 == 0) # Removing  B
+
+DimPlot(TB_BAL_AM, group.by = "seurat_clusters", label = TRUE, repel = TRUE) # T and B removed
+DimPlot(TB_BAL_AM, group.by = "orig.ident") # Nice and combined
+
+# reclustering to see if i can get better clusters
 TB_BAL_AM <- FindNeighbors(TB_BAL_AM, reduction = "integrated", dims = 1:10) %>%
   FindClusters() %>%
   RunUMAP(dims = 1:10)
-
-DimPlot(TB_BAL_AM)
 DimPlot(TB_BAL_AM, group.by = "orig.ident")
-# Still strong batch effect for 1676 and 1376
 
-# Testing if the main genes dividing 1676 and 1376 are technical. 
+# Testing if the main genes dividing 1376 are technical. 
 # Renaming clusters for testing 
-TB_BAL_AM$batch <- ifelse(TB_BAL_AM$orig.ident %in% c("BAL_1676"), "BAL_1676", 
-    ifelse(TB_BAL_AM$orig.ident %in% c("BAL_1376"), "BAL_1376", "combined"))
+TB_BAL_AM$batch <- ifelse(TB_BAL_AM$orig.ident %in% c("BAL_1376"), "BAL_1376", "combined")
 
 TB_BAL_AM <- SetIdent(TB_BAL_AM, value = "batch")
-
-# Find top diff. exp genes separating 1676 from the rest
-markers_1676 <- FindMarkers(TB_BAL_AM, 
-                            ident.1 = "BAL_1676", 
-                            min.pct = 0.25, 
-                            logfc.threshold = 0.25)
-head(markers_1676[markers_1676$avg_log2FC > 0, ], n = 10)
-# Definitely techincal noise 
 
 # Find markers for BAL_1376 vs all others 
 markers_1376 <- FindMarkers(TB_BAL_AM, 
@@ -188,13 +207,29 @@ head(markers_1376[markers_1376$avg_log2FC > 0, ], n = 10)
 tail(markers_1376[markers_1376$avg_log2FC < 0, ], n = 10)
 
 
+# Find markers 
+TB_BAL_AM <- SetIdent(TB_BAL_AM, value = "celltype")
 
-# Finding that 1376 is true biological signal difference!
+
+markers_mature <- FindMarkers(TB_BAL_AM, 
+                            ident.1 = "mature", 
+                            min.pct = 0.25, 
+                            logfc.threshold = 0.25)
+markers_mature <- markers_mature[order(markers_mature$avg_log2FC, decreasing = TRUE), ]
+head(markers_mature[markers_mature$avg_log2FC > 0, ], n = 10)
+
+markers_proliferating <- FindMarkers(TB_BAL_AM, 
+                            ident.1 = "proliferating", 
+                            min.pct = 0.25, 
+                            logfc.threshold = 0.25)
+markers_proliferating <- markers_proliferating[order(markers_proliferating$avg_log2FC, decreasing = TRUE), ]
+head(markers_proliferating[markers_proliferating$avg_log2FC > 0, ], n = 10)
+
+# Finding: 1376 is true biological signal difference!
 FeaturePlot(TB_BAL_AM, features = c(
-    # "MARCO", "ITGAM" # high in early 
-    "C8B", "IFI27", # high in mature
+    # "CD36", "ITGAM" # high in early 
+    # "C8B", "IFI27", # high in mature
 ))
-
 
 # differentiation ie CD206, CD169, CD163, IFNA, IL10, IL6, TNF, TGFb?
 FeaturePlot(TB_BAL_AM, features = c(
@@ -207,16 +242,6 @@ FeaturePlot(TB_BAL_AM, features = c(
     #"TNF" # Very low everywhere 
     "TGFB1" # medium everywhere 
 ))
-
-# Other signals 
-# From 1376
-FeaturePlot(TB_BAL_AM, features = c(
-    "CYP1B1", "ITGAM", "KLF2", "EMP1" , #only 1376
-    "FN1", # much higher in 1376
-    
-))
-DimPlot(TB_BAL_AM, group.by = "orig.ident")
-# Likely early recruited population of alveolar macrophages in 1376
 
 # What is cluster 8 being separated by?
 TB_BAL_AM <- SetIdent(TB_BAL_AM, value = "seurat_clusters")
@@ -246,57 +271,50 @@ TB_BAL_AM <- CellCycleScoring(
 
 DimPlot(TB_BAL_AM, reduction = "umap", group.by = "Phase", pt.size = 2)
 
-FeaturePlot(TB_BAL_AM, pt.size = 2,
-    features = c(
-    #"ITGAM" # "MARCO"
-    "EMP1", 
-    "CYP1B1" # definitiely only early
-))
+# For plots for analysis -----
+DimPlot(TB_BAL_AM, reduction = "umap", group.by = "seurat_clusters", pt.size = 2, label = TRUE, repel = TRUE)
 
-
-# For plots for analysis 
 # Define groups for the clusters & show dot plot why
 TB_BAL_AM$celltype <- ifelse(TB_BAL_AM$seurat_clusters == 8, "Proliferating", "-")
-TB_BAL_AM$celltype <- ifelse(TB_BAL_AM$batch == "BAL_1376", "Early", TB_BAL_AM$celltype )
-TB_BAL_AM$celltype <- ifelse(TB_BAL_AM$celltype == "-", "Mature", TB_BAL_AM$celltype )
+DimPlot(TB_BAL_AM, group.by = "celltype", pt.size = 2) # clear proliferating cluster but early vs mature not clear
 
-# See if division makes sense 
-DimPlot(TB_BAL_AM, group.by = "celltype", pt.size = 2) # Okay but some early & mature cells in wrong cluster 
+# Using Loupe for wrappin tool 
+remotes::install_github("10XGenomics/loupeR")
+loupeR::setup()
+library("loupeR")
+create_loupe_from_seurat(TB_BAL_AM, 
+output_dir = "/home/alicen/Projects/TB_BAL_data/data/LoupeR",
+output_name = "TB_BAL_AM_unlabelled")
 
-# By cell cycle phase
-TB_BAL_AM$celltype <- ifelse((TB_BAL_AM$Phase == "S") & (TB_BAL_AM$seurat_clusters == 8), "Proliferating", TB_BAL_AM$celltype)
+# Read in the manual labels 
+labels <- read.csv("/home/alicen/Projects/TB_BAL_data/data/LoupeR/BAL_labels.csv")
 
-# Make column for expression of NB genes, which is the main gene separating early vs mature
-TB_BAL_AM$ITGAM <- TB_BAL_AM@assays$RNA$data["ITGAM", ]
-TB_BAL_AM$CYP1B1 <- TB_BAL_AM@assays$RNA$data["CYP1B1", ]
-TB_BAL_AM$EMP1 <- TB_BAL_AM@assays$RNA$data["EMP1", ]
+# Match barcodes to tranfer labels 
+TB_BAL_AM$celltype <- labels$Proliferating[match(colnames(TB_BAL_AM), labels$Barcode)]
+TB_BAL_AM$celltype <- ifelse(is.na(TB_BAL_AM$celltype), "mature", TB_BAL_AM$celltype)
 
-
-# see distribution of ITGAM expression
-ggplot(TB_BAL_AM@meta.data, aes(x = ITGAM, y = nFeature_RNA)) + geom_point() 
-# clear group of cells with no ITGAM expression (aka zero)
-
-# Targetting populations 
-TB_BAL_AM$celltype <- ifelse((TB_BAL_AM$ITGAM == 0) & (TB_BAL_AM$celltype == "Early"), "Mature", TB_BAL_AM$celltype)
 DimPlot(TB_BAL_AM, group.by = "celltype", pt.size = 2)
 
-TB_BAL_AM$celltype <- ifelse(TB_BAL_AM$batch == "BAL_1376", "Early", TB_BAL_AM$celltype )
-
-TB_BAL_AM$celltype <- ifelse((TB_BAL_AM$CYP1B1 > 0.5), "Early", TB_BAL_AM$celltype)
-TB_BAL_AM$celltype <- ifelse((TB_BAL_AM$EMP1 > 1) & (TB_BAL_AM$celltype != "Proliferating"), "Early", TB_BAL_AM$celltype)
-
-DimPlot(TB_BAL_AM, group.by = "celltype", pt.size = 2) # Better separation of early vs mature now
-
-
+saveRDS(TB_BAL_AM, "~/Projects/TB_BAL_data/data/integrated/TB_BAL_AM.rds")
 
 # Plotting -----
 
 # Dot plot of top genes separating early vs mature vs proliferating 
-TB_BAL_AM$celltype <- factor(TB_BAL_AM$celltype, levels = c("Early", "Proliferating", "Mature"))
+TB_BAL_AM$celltype <- factor(TB_BAL_AM$celltype, levels = c("mature", "proliferating", "early"))
 
-DotPlot(
+markers_dot <- DotPlot(cols = c( "lightgrey", "#1D78B4"),
     TB_BAL_AM, 
-    features = c("ITGAM", "CYP1B1", "EMP1", "MKI67", "TYMS", "TOP2A"), 
+    features = c( "MARCO", "THBS1","FABP4", "ITGAM", "CYP1B1", "EMP1", "MKI67", "TYMS", "TOP2A"), 
     group.by = "celltype"
-) + coord_flip()
+) + 
+  theme(
+    panel.background = element_rect(fill = "white", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1),
+    axis.text.x = element_text(angle = 90, hjust = 1),
+    axis.title = element_blank())
+
+
+ggsave("./plots/composition/markers_dot.svg", markers_dot, width = 8, height = 4)
+
 

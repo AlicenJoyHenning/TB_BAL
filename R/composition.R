@@ -23,17 +23,15 @@ celltype_counts_normalized <- info %>%
 
 # Data manipulation -----
 # Subset for BAL and PBMCs 
-BAL <- subset(info, grepl("BAL", info$orig.ident))
+# BAL <- subset(info, grepl("BAL", info$orig.ident))
 PBMC <- subset(info, grepl("PBMC", info$orig.ident))
+BAL <- readRDS( "~/Projects/TB_BAL_data/data/integrated/TB_BAL_lymphocytes_labelled.rds")
+# Save for plot 
 
 # Correct normalization
-BAL_normalized <- BAL %>%
-  count(sample, annotation) %>%
-  left_join(BAL %>% count(sample, name = "total_cells"), by = "sample") %>%
-  mutate(proportion = n / total_cells)
-BAL_normalized$total_cells <- NULL
-BAL_normalized$n <- NULL
-BAL_normalized
+BAL_normalized <- BAL@meta.data %>%
+  count(orig.ident, groups) %>%
+  mutate(proportion = n / sum(n))
 
 PBMC_normalized <- PBMC %>%
   count(sample, annotation) %>%
@@ -48,7 +46,10 @@ colours <- c("T" = "#A6CEE3",
              "B" = "#B2DE89",
              "ncMono" = "#FB9A99",
              "cMono" = "#33A02C", 
-             "myeloid" = "#1D78B4")
+             "myeloid" = "#1D78B4",
+             "Myeloid" = "#1D78B4"
+            )
+
 
 # Prepare the data
 celltype_counts_normalized <- celltype_counts_normalized %>%
@@ -56,15 +57,35 @@ celltype_counts_normalized <- celltype_counts_normalized %>%
   group_by(sample) %>%
   mutate(proportion = n / sum(n))  # Normalize proportions
 
+
+celltype_counts_normalized <- BAL@meta.data %>%
+
+  mutate(groups = factor(groups, levels = c("B", "T",  "Myeloid"))) %>%
+  group_by(orig.ident) %>%
+  count(groups) %>%
+  mutate(proportion = n / sum(n))
+
 # Create the stacked bar plot
-plot <- ggplot(celltype_counts_normalized, 
-               aes(x = proportion, y = factor(sample), fill = annotation)) +
+celltype_probs <- BAL@meta.data %>%
+  mutate(groups = factor(groups, levels = c("B", "T", "Myeloid"))) %>%
+  group_by(orig.ident) %>%
+  count(groups) %>%
+  mutate(proportion = n / sum(n)) %>%
+  ungroup()
+
+# Create the stacked bar plot
+plot <- ggplot(celltype_probs, 
+       aes(x = proportion, y = orig.ident, fill = groups)) +
   geom_bar(stat = "identity") +
+  # Adds percentage labels on the axes
+  scale_x_continuous(labels = scales::percent_format()) + 
   scale_fill_manual(values = colours) +
-  labs(fill = "") +
+  labs(fill = "Cell Group", x = "Proportion of Sample", y = "Sample ID") +
   theme_minimal() +
-  theme(axis.title = element_blank(), 
-        legend.position = "bottom")  
+  theme(
+    legend.position = "bottom",
+    axis.title.y = element_blank() # Matches your previous style
+  )
 
 # Save the plot as an SVG
 ggsave("./plots/composition/PBMC_BAL_proportion.svg", plot, width = 8, height = 4)
