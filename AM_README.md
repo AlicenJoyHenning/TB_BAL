@@ -33,14 +33,17 @@ The isolated AMs were further analyzed through subclustering with `Seurat`. Thre
 
 <br>
 
-![](https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/AM_clusters_features.svg)
+:::{layout-ncol=2}
+![](https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/AM_clusters_umap.png){width=80%}
 
-![](https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/AM_clusters_umap.png)
+![](https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/AM_clusters_features.svg){width=80%}
+:::
 
-![ ](https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/markers_dot.svg)
+![](https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/markers_dot.svg){width=80%}
 
 **Figure** Alevolar Macrophage (AM) subclusters with marker gene expression 
-
+  
+  <br>
 
 
 **Table**  Differential expression of genes for each AM subcluster 

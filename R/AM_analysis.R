@@ -315,6 +315,44 @@ markers_dot <- DotPlot(cols = c( "lightgrey", "#1D78B4"),
     axis.title = element_blank())
 
 
-ggsave("./plots/composition/markers_dot.svg", markers_dot, width = 8, height = 4)
+ggsave("./plots/composition/markers_dot.svg", markers_dot, width = 9, height = 4)
 
 
+# Basc UMAP 
+umap_plot <- DimPlot(TB_BAL_AM, reduction = "umap", group.by = "celltype", pt.size = 2) + 
+  theme(
+    legend.position = "bottom",
+    plot.title = element_blank(),
+    panel.background = element_rect(fill = "white", color = NA),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.border = element_rect(color = "black", fill = NA, linewidth = 1),
+    axis.ticks = element_blank(),
+    axis.text = element_blank()) 
+
+ggsave("./plots/AM_clusters_umap.png", umap_plot , width = 4, height = 4)
+
+# Feature Plots 
+# Generate the initial multi-panel plot
+feature <- FeaturePlot(TB_BAL_AM, 
+                        pt.size = 2,
+                       features = c("MARCO", "CYP1B1", "MKI67"), 
+                       order = TRUE, 
+                       ncol = 1,
+                       cols = c("lightgrey", "#1D78B4")) 
+
+# 2. Iterate through each panel to apply the uniform style
+for (i in 1:length(feature)) {
+  feature[[i]] <- feature[[i]] + 
+    NoAxes() + 
+    theme(
+      plot.title = element_text(face = "italic", hjust = 0.5),
+      panel.background = element_rect(fill = "white", color = NA),
+      plot.background = element_rect(fill = "white", color = NA),
+      panel.border = element_rect(color = "black", fill = NA, linewidth = 1),
+      legend.position = "right" # "right" often looks better for vertical stacks
+    )
+}
+
+# 3. Save with vertical dimensions
+# Swapping 9 and 4: now it is 4 inches wide and 9 inches tall
+ggsave("./plots/AM_clusters_features.svg", feature, width = 4, height = 9)
