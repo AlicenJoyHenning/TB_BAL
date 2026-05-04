@@ -334,13 +334,13 @@ ggsave("./plots/AM_clusters_umap.png", umap_plot , width = 4, height = 4)
 # Feature Plots 
 # Generate the initial multi-panel plot
 feature <- FeaturePlot(TB_BAL_AM, 
-                        pt.size = 2,
+                       pt.size = 2,
                        features = c("MARCO", "CYP1B1", "MKI67"), 
                        order = TRUE, 
-                       ncol = 1,
-                       cols = c("lightgrey", "#1D78B4")) 
+                       ncol = 3,
+                       cols = c("lightgrey", "#1D78B4"))
 
-# 2. Iterate through each panel to apply the uniform style
+# Iterate through each panel to apply the uniform style
 for (i in 1:length(feature)) {
   feature[[i]] <- feature[[i]] + 
     NoAxes() + 
@@ -349,10 +349,66 @@ for (i in 1:length(feature)) {
       panel.background = element_rect(fill = "white", color = NA),
       plot.background = element_rect(fill = "white", color = NA),
       panel.border = element_rect(color = "black", fill = NA, linewidth = 1),
-      legend.position = "right" # "right" often looks better for vertical stacks
+      legend.position = "bottom" # Bottom usually looks cleaner for a horizontal row
     )
 }
 
-# 3. Save with vertical dimensions
-# Swapping 9 and 4: now it is 4 inches wide and 9 inches tall
-ggsave("./plots/AM_clusters_features.svg", feature, width = 4, height = 9)
+ggsave("./plots/AM_clusters_features.svg", feature, width = 9, height = 4)
+
+
+# Proportions library(dplyr)
+
+
+celltype_probs <- TB_BAL_AM@meta.data %>%
+  # Ensure we are counting celltype within each sample
+  group_by(orig.ident) %>%
+  count(celltype) %>%
+  mutate(proportion = n / sum(n)) %>%
+  ungroup()
+
+celltype_probs <- celltype_probs %>%
+  mutate(orig.ident = reorder(orig.ident, proportion, 
+                              FUN = function(x) sum(x[celltype_probs$celltype == "Mature AM"])))
+
+plot <- ggplot(celltype_probs, 
+               aes(x = proportion, y = orig.ident, fill = celltype)) + # Changed 'groups' to 'celltype'
+  geom_bar(stat = "identity") +
+  scale_x_continuous(labels = scales::percent_format(), expand = c(0,0)) + 
+  scale_fill_manual(values = c("early" = "#619CFF", 
+                               "proliferating" = "#00BA38", 
+                               "mature" = "#E26B63")) +
+  labs(fill = "", x = "", y = NULL) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    panel.grid.minor = element_blank(),
+    panel.grid.major.y = element_blank() # Clean vertical look
+  )
+
+# Save the plot as an SVG
+ggsave("./plots/BAL_subtype_proportion.svg", plot, width = 8, height = 4)
+
+
+# Differentiation expression plots -----
+
+low_feature <- FeaturePlot(TB_BAL_AM, 
+                       pt.size = 2,
+                       features = c("MRC1", "TGFB1", "SIGLEC1", "CD163", "IFNAR1", "IFNAR2", "IL6", "IL10"), 
+                       order = TRUE, 
+                       cols = c("lightgrey", "#1D78B4"))
+
+# Iterate through each panel to apply the uniform style
+for (i in 1:length(low_feature)) {
+  low_feature[[i]] <- low_feature[[i]] + 
+    NoAxes() + 
+    theme(
+      plot.title = element_text(face = "italic", hjust = 0.5),
+      panel.background = element_rect(fill = "white", color = NA),
+      plot.background = element_rect(fill = "white", color = NA),
+      panel.border = element_rect(color = "black", fill = NA, linewidth = 1),
+      legend.position = "bottom" # Bottom usually looks cleaner for a horizontal row
+    )
+}
+
+
+ggsave("./plots/differentiation_features.svg", low_feature, width = 8, height = 10)

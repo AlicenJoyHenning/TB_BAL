@@ -32,7 +32,6 @@ The isolated AMs were further analyzed through subclustering with `Seurat`. Thre
 
 ![](https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/AM_clusters_features.svg){width=80%}
 
-
 ![](https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/markers_dot.svg){width=80%}
 
 **Figure** Alevolar Macrophage (AM) subclusters with marker gene expression 
@@ -42,7 +41,7 @@ The isolated AMs were further analyzed through subclustering with `Seurat`. Thre
 
 **Table**  Differential expression of genes for each AM subcluster 
 
-| AM Subset | Gene | $p_{adj}$ | $avg\_log2FC$ |
+| AM Subset | Gene | $p_{adj}$ | avg_log2FC |
 | :--- | :--- | :--- | :--- |
 | **Early Activated** | *CYP1B1* | $4.21 \times 10^{-225}$ | 7.64 |
 | | *EMP1* | $6.58 \times 10^{-162}$ | 2.79 |
@@ -59,7 +58,7 @@ The isolated AMs were further analyzed through subclustering with `Seurat`. Thre
 <br> 
 
 ## Subcluster Proportions 
-While each BAL sample has a heterogenous colleciton of AM subclusters, BAL_1376 has a definitively higher proportion of early AMs compared to mature AMS.
+While each BAL sample has a heterogenous colleciton of AM subclusters, BAL_1376 has a uniquely higher proportion of early AMs.
 
 <br>
 
@@ -87,3 +86,5 @@ However, no significant differences in expression were detected across the sampl
 
 
 ![](https://github.com/AlicenJoyHenning/TB_BAL/raw/master/plots/differentiation_features.svg)
+
+**Figure** Uniform expression of gene markers of differentiation across AM subclusters
