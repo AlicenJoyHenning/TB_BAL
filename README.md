@@ -1,4 +1,5 @@
 # Sutherland project \| BAL PBMC dataset
+[Updated: AM Analysis](https://github.com/AlicenJoyHenning/TB_BAL/blob/master/AM_README.md)
 
 ## Preprocessing workflow
 
@@ -81,7 +82,7 @@ In general, samples of BAL origin are rich in myeloid cells while PBMCs are rich
 | ID_1483 |  1  | 19 | 710   |
 | ID_1523 | 1  | 10  |  443   |
 | ID_1566 |  1  | 10  |  701   |
-| ID_1676 | 0  |  10  |  240   |
+| ID_1676 | 0  |  9  |  NA   |
 
 **PBMC**
 
